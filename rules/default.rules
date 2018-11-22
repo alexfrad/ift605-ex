@@ -40,7 +40,8 @@ when
     // Time cron "0 0 * * * ? *"
     Time cron "0 * * * * ? *"
 then
-    logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour TRY")
+    logInfo("Ceiling_Light.OFF.timer", "Each hour TRY")
+    Ceiling_Sensor_Motion.sendCommand(OFF)
     if (Ceiling_Light.state > 0) {
         logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour")
         Ceiling_Light.sendCommand(0)
