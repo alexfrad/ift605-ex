@@ -1,1 +1,3 @@
-Switch Presence_Mobile_John "Johns Mobile" <network> { channel="network:device:192_168_1_103:online" }
+Switch Contact_Sensor "Door's Contact sensor" <network> { channel="network:device:192_168_1_103:online" }
+Switch Motion_Sensor "Ceiling's motion sensor" <network> { channel="network:device:192_168_1_104:online" }
+Switch Light "Ceiling's light" <network> { channel="network:device:192_168_1_105:online" }
