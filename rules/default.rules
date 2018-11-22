@@ -1,5 +1,4 @@
 var Number luminanceThreshold = 180
-var Number lowBatteryThreshold = 100
 
 rule "Ceiling_Light ON"
 when
@@ -14,61 +13,25 @@ then
     }
 end
 
-rule "Ceiling_Light OFF"
+rule "Door_Sensor_Contact OFF"
 when
     Item Door_Sensor_Contact changed from OPEN to CLOSED
 then
-    logInfo("Ceiling_Light.OFF", "Ceiling_Light closed on door trigger")
-    //Ceiling_Light.sendCommand(OFF)
-
-
-    // logWarn("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    // logInfo("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    
-
-    // if((Door_Sensor_Battery.state as Number) < lowBatteryThreshold){
-    //     logWarn("Door_Sensor_Battery.LOW", "Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    // }
-    // if((Ceiling_Sensor_Battery.state as Number) < lowBatteryThreshold){
-    //     logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is at " + Ceiling_Sensor_Battery.state)
-    // }
+    logInfo("Door_Sensor_Contact.OFF", "Door_Sensor_Contact closed")
 end
 
 
 rule "Ceiling_Light OFF on timer"
 when
-    // Time cron "0 0 * * * ? *"
-    Time cron "0 * * * * ? *"
+    Time cron "0/30 * * ? * * *" //30 seconds
 then
-    logInfo("Ceiling_Light.OFF.timer", "Each hour TRY")
-    Ceiling_Sensor_Motion.sendCommand(OFF)
-    if (Ceiling_Light.state > 0) {
-        logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour")
-        Ceiling_Light.sendCommand(0)
+    logInfo("Ceiling_Light.OFF.timer", "Each 30 seconds TRY")
+    if(Ceiling_Sensor_Motion.state == ON){
+        Ceiling_Sensor_Motion.sendCommand(OFF)
+    }else{
+        if (Ceiling_Light.state > 0) {
+            logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour")
+            Ceiling_Light.sendCommand(0)
+        }
     }
 end
-
-
-
-
-
-// rule "Door_Sensor_Battery LOW"
-// when
-//     Item Door_Sensor_Battery updated 
-// then
-//     logInfo("Door_Sensor_Battery.BATTERYCHECK")
-//     if(Door_Sensor_Battery.state<20){
-//         logInfo("Door_Sensor_Battery.LOW: Door_Sensor_Battery is low")
-//     }
-// end
-
-
-// rule "Ceiling_Sensor_Battery LOW"
-// when
-//     Item Ceiling_Sensor_Battery updated 
-// then
-//     logInfo("RULE.RUNNING.BATTERYCHECK")
-//     if(Ceiling_Sensor_Battery.state<20){
-//         logInfo("RULE.RUNNING.BATTERYCHECK: Door_Sensor_Battery is low")
-//     }
-// end
