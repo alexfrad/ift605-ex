@@ -5,4 +5,4 @@ Switch Ceiling_Sensor_Motion "Ceiling's motion sensor" <switch> { channel="zwave
 Number Ceiling_Sensor_Luminance "Ceiling's luminance sensor's" <light> { channel="zwave:device:06b030ff:node2:sensor_luminance" }
 Number Ceiling_Sensor_Battery "Ceiling's motion sensor's battery level" <batterylevel> { channel="zwave:device:06b030ff:node2:battery-level" }
 
-Switch Ceiling_Light "Ceiling's light" <light> { channel="zwave:device:06b030ff:node4:switch_dimmer" }
+Dimmer Ceiling_Light "Ceiling's light" <light> { channel="zwave:device:06b030ff:node4:switch_dimmer" }
