@@ -12,7 +12,7 @@ then
     }else{
         logInfo("Ceiling_Light.ON", "Rule has run but Luminance is high: " + Ceiling_Sensor_Luminance.state + " is higher than " + luminanceThreshold)
     }
-    Door_Sensor_Battery.sendCommand(BATTERY_GET)
+    Door_Sensor_Battery.sendCommand("BATTERY_GET")
     logWarn("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     logInfo("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     if(Door_Sensor_Battery.state < batteryLifeThreshold){
