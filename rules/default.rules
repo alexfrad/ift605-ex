@@ -41,9 +41,9 @@ when
     Time cron "0 * * * * ? *"
 then
     logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour TRY")
-    if (Ceiling_Light.state == ON) {
+    if (Ceiling_Light.state > 0) {
         logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour")
-        Ceiling_Light.sendCommand(OFF)
+        Ceiling_Light.sendCommand(0)
     }
 end
 
