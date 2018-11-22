@@ -1,13 +1,14 @@
 rule "Ceiling_Light ON"
 when
-  Item Door_Sensor_Contact changed from OFF to ON
+    // Item Ceiling_Sensor_Motion update [<state>] or
+    Item Door_Sensor_Contact changed from OFF to ON 
 then
-  Ceiling_Light.sendCommand(ON)
+    Ceiling_Light.sendCommand(ON)
 end
 
 rule "Ceiling_Light OFF"
 when
-  Item Door_Sensor_Contact changed from ON to OFF
+    Item Door_Sensor_Contact changed from ON to OFF
 then
-  Ceiling_Light.sendCommand(OFF)
+    Ceiling_Light.sendCommand(OFF)
 end
