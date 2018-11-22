@@ -6,4 +6,4 @@ Number Ceiling_Sensor_Luminance "Ceiling's luminance sensor's" <light> { channel
 Number Ceiling_Sensor_Battery "Ceiling's motion sensor's battery level" <batterylevel> { channel="zwave:device:06b030ff:node2:battery-level" }
 
 //TODO: To be bind and added
-Switch Ceiling_Light "Ceiling's light" <light> { channel="network:device:127_0_0_1:online" }
+Switch Ceiling_Light "Ceiling's light" <light> { channel="network:device:192_168_1_100:online" }
