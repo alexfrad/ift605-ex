@@ -10,6 +10,6 @@ sitemap default label="my space"
         Default item=Ceiling_Sensor_Battery label="Battery"
     }
     Frame label="Lightbulb" {
-        Dimmer  item=Ceiling_Light label="Ceiling_Light"
+        Switch  item=Ceiling_Light label="Ceiling_Light"
     }
 }
