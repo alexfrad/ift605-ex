@@ -3,10 +3,12 @@ when
     Item Ceiling_Sensor_Motion changed from OFF to ON or
     Item Door_Sensor_Contact changed from CLOSED to OPEN 
 then
-    logInfo("RULE.RUNNING.LIGHT-TRIGGER-ON")
+    logInfo("RULE.RUNNING.Ceiling_Light.ON", "Rule has run")
     if(Ceiling_Sensor_Luminance.state < 180){
         Ceiling_Light.sendCommand(ON)
-        logInfo("RULE.RUNNING.LIGHT-TRIGGER: Ceiling_Light open")
+        logInfo("RULE.RUNNING.LIGHT-TRIGGER", "Ceiling_Light open")
+    }else{
+        logInfo("RULE.RUNNING.Ceiling_Light.ON", "Rule has run but light is high: " + Ceiling_Sensor_Luminance.state)
     }
 end
 
@@ -14,7 +16,7 @@ rule "Ceiling_Light OFF"
 when
     Item Door_Sensor_Contact changed from OPEN to CLOSED
 then
-    logInfo("RULE.RUNNING.LIGHT-TRIGGER-OFF: Ceiling_Light closed")
+    logInfo("RULE.RUNNING.Ceiling_Light.OFF", "Ceiling_Light closed")
     Ceiling_Light.sendCommand(OFF)
 end
 
