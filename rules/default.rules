@@ -12,18 +12,6 @@ then
     }else{
         logInfo("Ceiling_Light.ON", "Rule has run but Luminance is high: " + Ceiling_Sensor_Luminance.state + " is higher than " + luminanceThreshold)
     }
-
-
-    logWarn("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    logInfo("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    
-
-    if((Door_Sensor_Battery.state as Number) < lowBatteryThreshold){
-        logWarn("Door_Sensor_Battery.LOW", "Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    }
-    if((Ceiling_Sensor_Battery.state as Number) < lowBatteryThreshold){
-        logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is at " + Ceiling_Sensor_Battery.state)
-    }
 end
 
 rule "Ceiling_Light OFF"
@@ -34,16 +22,16 @@ then
     Ceiling_Light.sendCommand(OFF)
 
 
-    logWarn("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    logInfo("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
+    // logWarn("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
+    // logInfo("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     
 
-    if((Door_Sensor_Battery.state as Number) < lowBatteryThreshold){
-        logWarn("Door_Sensor_Battery.LOW", "Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    }
-    if((Ceiling_Sensor_Battery.state as Number) < lowBatteryThreshold){
-        logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is at " + Ceiling_Sensor_Battery.state)
-    }
+    // if((Door_Sensor_Battery.state as Number) < lowBatteryThreshold){
+    //     logWarn("Door_Sensor_Battery.LOW", "Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
+    // }
+    // if((Ceiling_Sensor_Battery.state as Number) < lowBatteryThreshold){
+    //     logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is at " + Ceiling_Sensor_Battery.state)
+    // }
 end
 
 
