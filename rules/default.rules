@@ -8,7 +8,7 @@ when
 then
     if(Ceiling_Sensor_Luminance.state < luminanceThreshold){
         Ceiling_Light.sendCommand(ON)
-        logInfo("Ceiling_Light.ON", "Ceiling_Light open")
+        logInfo("Ceiling_Light.ON", "Ceiling_Light open on trigger")
     }else{
         logInfo("Ceiling_Light.ON", "Rule has run but Luminance is high: " + Ceiling_Sensor_Luminance.state + " is higher than " + luminanceThreshold)
     }
@@ -18,7 +18,7 @@ rule "Ceiling_Light OFF"
 when
     Item Door_Sensor_Contact changed from OPEN to CLOSED
 then
-    logInfo("Ceiling_Light.OFF", "Ceiling_Light closed")
+    logInfo("Ceiling_Light.OFF", "Ceiling_Light closed on door trigger")
     Ceiling_Light.sendCommand(OFF)
 
 
@@ -35,16 +35,17 @@ then
 end
 
 
-// rule "Battery Monitor"
-// when
-//     Time cron "0 0 0 0 0 ?"
-// then
-//     if (Ceiling_Sensor_Battery.state as Number <= lowBatteryThreshold) {
-//         val String report = Batteries.allMembers.filter( [ (state as Number) <= (lowBatteryThreshold) ] ).sortBy( [ state as Number ] ).map[ name + ": " + state.toString ].join("\n")
-//         val message = "Battery levels:\n\n" + report + "\n\nRegards,\n\nOur House"
-//         logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is LOW ")
-//     }
-// end
+rule "Ceiling_Light OFF on timer"
+when
+    // Time cron "0 0 * * * ? *"
+    Time cron "0 * * * * ? *"
+then
+    logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour TRY")
+    if (Ceiling_Light.state == ON) {
+        logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour")
+        Ceiling_Light.sendCommand(OFF)
+    }
+end
 
 
 
