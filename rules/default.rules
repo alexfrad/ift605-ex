@@ -5,12 +5,11 @@ when
     Item Ceiling_Sensor_Motion changed from OFF to ON or
     Item Door_Sensor_Contact changed from CLOSED to OPEN 
 then
-    logInfo("Ceiling_Light.ON", "Rule has run")
     if(Ceiling_Sensor_Luminance.state < luminanceThreshold){
         Ceiling_Light.sendCommand(ON)
         logInfo("LIGHT-TRIGGER", "Ceiling_Light open")
     }else{
-        logInfo("RULE.RUNNING.Ceiling_Light.ON", "Rule has run but Luminance is high: " + Ceiling_Sensor_Luminance.state + "is higher than" + luminanceThreshold)
+        logInfo("RULE.RUNNING.Ceiling_Light.ON", "Rule has run but Luminance is high: " + Ceiling_Sensor_Luminance.state + " is higher than " + luminanceThreshold)
     }
 end
 
@@ -23,15 +22,15 @@ then
 end
 
 
-// rule "Door_Sensor_Battery LOW"
-// when
-//     Item Door_Sensor_Battery updated 
-// then
-//     logInfo("RULE.RUNNING.BATTERYCHECK")
-//     if(Door_Sensor_Battery.state<20){
-//         logInfo("RULE.RUNNING.BATTERYCHECK: Door_Sensor_Battery is low")
-//     }
-// end
+rule "Door_Sensor_Battery LOW"
+when
+    Item Door_Sensor_Battery updated 
+then
+    logInfo("RULE.RUNNING.BATTERYCHECK")
+    if(Door_Sensor_Battery.state<20){
+        logInfo("RULE.RUNNING.BATTERYCHECK: Door_Sensor_Battery is low")
+    }
+end
 
 
 // rule "Ceiling_Sensor_Battery LOW"
