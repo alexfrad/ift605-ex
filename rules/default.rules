@@ -38,10 +38,10 @@ then
     logInfo("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     
 
-    if(Door_Sensor_Battery.state as Number < lowBatteryThreshold){
+    if((Door_Sensor_Battery.state as Number) < lowBatteryThreshold){
         logWarn("Door_Sensor_Battery.LOW", "Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     }
-    if(Ceiling_Sensor_Battery.state as Number < lowBatteryThreshold){
+    if((Ceiling_Sensor_Battery.state as Number) < lowBatteryThreshold){
         logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is at " + Ceiling_Sensor_Battery.state)
     }
 end
