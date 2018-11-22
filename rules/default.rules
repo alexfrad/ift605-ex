@@ -19,7 +19,7 @@ when
     Item Door_Sensor_Contact changed from OPEN to CLOSED
 then
     logInfo("Ceiling_Light.OFF", "Ceiling_Light closed on door trigger")
-    Ceiling_Light.sendCommand(OFF)
+    //Ceiling_Light.sendCommand(OFF)
 
 
     // logWarn("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
