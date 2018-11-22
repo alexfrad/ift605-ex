@@ -1,14 +1,16 @@
+var Number luminanceThreshold = 180
+
 rule "Ceiling_Light ON"
 when
     Item Ceiling_Sensor_Motion changed from OFF to ON or
     Item Door_Sensor_Contact changed from CLOSED to OPEN 
 then
     logInfo("Ceiling_Light.ON", "Rule has run")
-    if(Ceiling_Sensor_Luminance.state < 10){
+    if(Ceiling_Sensor_Luminance.state < luminanceThreshold){
         Ceiling_Light.sendCommand(ON)
         logInfo("LIGHT-TRIGGER", "Ceiling_Light open")
     }else{
-        logInfo("RULE.RUNNING.Ceiling_Light.ON", "Rule has run but light is high: " + Ceiling_Sensor_Luminance.state)
+        logInfo("RULE.RUNNING.Ceiling_Light.ON", "Rule has run but Luminance is high: " + Ceiling_Sensor_Luminance.state + "is higher than" + luminanceThreshold)
     }
 end
 
