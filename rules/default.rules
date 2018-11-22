@@ -1,5 +1,5 @@
 var Number luminanceThreshold = 180
-var Number batteryLifeThreshold = 100
+var Number lowBatteryThreshold = 100
 
 rule "Ceiling_Light ON"
 when
@@ -12,13 +12,16 @@ then
     }else{
         logInfo("Ceiling_Light.ON", "Rule has run but Luminance is high: " + Ceiling_Sensor_Luminance.state + " is higher than " + luminanceThreshold)
     }
-    Door_Sensor_Battery.sendCommand("BATTERY_GET")
+
+
     logWarn("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     logInfo("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
-    if(Door_Sensor_Battery.state < batteryLifeThreshold){
+    
+
+    if(Door_Sensor_Battery.state as Number < lowBatteryThreshold){
         logWarn("Door_Sensor_Battery.LOW", "Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     }
-    if(Ceiling_Sensor_Battery.state < batteryLifeThreshold){
+    if(Ceiling_Sensor_Battery.state as Number < lowBatteryThreshold){
         logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is at " + Ceiling_Sensor_Battery.state)
     }
 end
@@ -35,13 +38,28 @@ then
     logInfo("Door_Sensor_Battery.LOW", "CHECK Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     
 
-    if(Door_Sensor_Battery.state < batteryLifeThreshold){
+    if(Door_Sensor_Battery.state as Number < lowBatteryThreshold){
         logWarn("Door_Sensor_Battery.LOW", "Door_Sensor_Battery is at " + Door_Sensor_Battery.state)
     }
-    if(Ceiling_Sensor_Battery.state < batteryLifeThreshold){
+    if(Ceiling_Sensor_Battery.state as Number < lowBatteryThreshold){
         logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is at " + Ceiling_Sensor_Battery.state)
     }
 end
+
+
+// rule "Battery Monitor"
+// when
+//     Time cron "0 0 0 0 0 ?"
+// then
+//     if (Ceiling_Sensor_Battery.state as Number <= lowBatteryThreshold) {
+//         val String report = Batteries.allMembers.filter( [ (state as Number) <= (lowBatteryThreshold) ] ).sortBy( [ state as Number ] ).map[ name + ": " + state.toString ].join("\n")
+//         val message = "Battery levels:\n\n" + report + "\n\nRegards,\n\nOur House"
+//         logWarn("Ceiling_Sensor_Battery.LOW", "Ceiling_Sensor_Battery is LOW ")
+//     }
+// end
+
+
+
 
 
 // rule "Door_Sensor_Battery LOW"
