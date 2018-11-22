@@ -1,3 +1,9 @@
-Switch Contact_Sensor "Door's Contact sensor" <network> { channel="network:device:192_168_1_103:online" }
-Switch Motion_Sensor "Ceiling's motion sensor" <network> { channel="network:device:192_168_1_104:online" }
-Switch Light "Ceiling's light" <network> { channel="network:device:192_168_1_105:online" }
+Contact Door_Sensor_Contact "Door is [MAP(en.map):%s]" <switch> { channel="zwave:device:06b030ff:node3:sensor_door" }
+Number  Door_Sensor_Battery "Door's contact sensor's battery level" <batterylevel> { channel="zwave:device:06b030ff:node3:battery_level" }
+
+Switch Ceiling_Sensor_Motion "Ceiling's motion sensor" <switch> { channel="zwave:device:06b030ff:node2:sensor_binary" }
+Number Ceiling_Sensor_Luminance "Ceiling's luminance sensor's" <light> { channel="zwave:device:06b030ff:node2:sensor_luminance" }
+Number Ceiling_Sensor_Battery "Ceiling's motion sensor's battery level" <batterylevel> { channel="zwave:device:06b030ff:node2:battery_level" }
+
+//TODO: To be bind and added
+Switch Ceiling_Light "Ceiling's light" <light> { channel="zwave:device:06b030ff:node4:sensor_door" }
