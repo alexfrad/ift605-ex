@@ -1,9 +1,15 @@
 sitemap default label="my space"
 {
-    Switch  item=Door_Sensor_Contact        label="Door_Sensor_Contact"
-    Text    item=Door_Sensor_Battery        label="Door_Sensor_Battery [%.1f]"
-    Switch  item=Ceiling_Sensor_Motion      label="Ceiling_Sensor_Motion"
-    Text    item=Ceiling_Sensor_Luminance   label="Ceiling_Sensor_Luminance"
-    Text    item=Ceiling_Sensor_Battery     label="Ceiling_Sensor_Battery"
-    Switch  item=Ceiling_Light              label="Ceiling_Light"
+    Frame label="Contact" {
+        Default item=Door_Sensor_Contact label="Contact"
+        Default item=Door_Sensor_Battery label="Battery"
+    }
+    Frame label="Motion/light" {
+        Default item=Ceiling_Sensor_Motion label="Motion"
+        Default item=Ceiling_Sensor_Luminance label="Luminance"
+        Default item=Ceiling_Sensor_Battery label="Battery"
+    }
+    Frame label="Lightbulb" {
+        Switch  item=Ceiling_Light label="Ceiling_Light"
+    }
 }
