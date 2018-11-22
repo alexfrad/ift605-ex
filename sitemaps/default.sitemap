@@ -1,7 +1,7 @@
 sitemap default label="my space"
 {
     Switch  item=Door_Sensor_Contact        label="Door_Sensor_Contact"
-    Text    item=Door_Sensor_Battery        label="Door_Sensor_Battery: [%.1f %]"
+    Text    item=Door_Sensor_Battery        label="Door_Sensor_Battery [%.1f %]"
     Switch  item=Ceiling_Sensor_Motion      label="Ceiling_Sensor_Motion"
     Text    item=Ceiling_Sensor_Luminance   label="Ceiling_Sensor_Luminance"
     Text    item=Ceiling_Sensor_Battery     label="Ceiling_Sensor_Battery"
