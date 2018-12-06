@@ -1,15 +1,70 @@
-var Number luminanceThreshold = 180
+import java.util.*
+   
+var authorisation = newArrayList("36127591507779588")
+var Number luminanceThreshold = 110
+var Timer lock_timer = null
+var Timer motion_timer = null
+var Timer light_timer = null
+var Number motion_delay = 10
+var Number light_delay = 20
+var Number lock_delay = 5
 
-rule "Ceiling_Light ON"
+rule "Ceiling_Light TRY"
 when
-    Item Ceiling_Sensor_Motion changed from OFF to ON or
-    Item Door_Sensor_Contact changed from CLOSED to OPEN 
+    Item Ceiling_Light_Switch received update
 then
-    if(Ceiling_Sensor_Luminance.state < luminanceThreshold && Ceiling_Light.state == 0){
-        Ceiling_Light.sendCommand(ON)
-        logInfo("Ceiling_Light.ON", "Ceiling_Light open on trigger")
+    logInfo("Ceiling_Light.TRY", "Ceiling_Light.TRY triggered")
+    if(Ceiling_Sensor_Luminance.state < luminanceThreshold){
+        if(Ceiling_Light.state == 0){
+            Ceiling_Light.sendCommand(100)
+            logInfo("Ceiling_Light.TRY", "Ceiling_Light open on trigger")
+            light_timer = createTimer(now.plusSeconds(light_delay), [|
+                logInfo("Ceiling_Light.TRY", "Ceiling_light - Time Triggered")
+                light_timer = null
+                if(Ceiling_Sensor_Motion.state == OFF){
+                    Ceiling_Light.sendCommand(OFF)
+                    logInfo("Ceiling_Light.TRY", "Ceiling_light ON to OFF - Time triggered, no mouvement")
+                }else{
+                    Ceiling_Light_Switch.sendCommand(ON)
+                    logInfo("Ceiling_Light.TRY", "Ceiling_light - Time triggered, mouvement")
+                }
+            ])
+
+        }else{
+            logInfo("Ceiling_Light.TRY", "Ceiling_Light already open")
+        }
     }else{
-        logInfo("Ceiling_Light.ON", "Rule has run but Luminance: " + Ceiling_Sensor_Luminance.state + " is higher than " + luminanceThreshold + " or Ceiling_Light already open")
+	Ceiling_Light.sendCommand(0)
+        logInfo("Ceiling_Light.TRY", "Luminance: " + Ceiling_Sensor_Luminance.state + " is higher than " + luminanceThreshold)
+    }
+end
+
+rule "Ceiling_Sensor_Motion ON"
+when
+    Item Ceiling_Sensor_Motion changed from OFF to ON 
+then
+    logInfo("Ceiling_Sensor_Motion.ON", "Ceiling_Sensor_Motion.ON triggered")
+    Ceiling_Light_Switch.sendCommand(ON)
+    motion_timer = createTimer(now.plusSeconds(motion_delay), [|
+        Ceiling_Sensor_Motion.sendCommand(OFF)
+        logInfo("1", "Ceiling_Sensor_Motion On to OFF - Time Triggered")
+        motion_timer = null
+    ])
+
+end
+
+rule "Door_Sensor_Contact OPEN"
+when
+    Item Door_Sensor_Contact changed from CLOSED to OPEN
+then
+    logInfo("Door_Sensor_Contact.OPEN", "Door_Sensor_Contact.OPEN triggered")
+    if(Door_Lock.state == ON){
+        logInfo("Door_Sensor_Contact.OPEN", "Door_Lock opened, people coming")
+        Ceiling_Light_Switch.sendCommand(ON)
+        Door_Lock.sendCommand(OFF)
+    }else{
+        logInfo("Door_Sensor_Contact.OPEN", "Door_Lock closed, people leaving")
+        Ceiling_Sensor_Motion.sendCommand(OFF)
     }
 end
 
@@ -17,23 +72,34 @@ rule "Door_Sensor_Contact OFF"
 when
     Item Door_Sensor_Contact changed from OPEN to CLOSED
 then
-    logInfo("Door_Sensor_Contact.OFF", "Door_Sensor_Contact closed")
+    logInfo("Door_Sensor_Contact.OFF", "Door_Sensor_Contact.OFF triggered")
+    logInfo("Door_Sensor_Contact.OFF", "Ceiling_Sensor_Motion turned OFF")
     Ceiling_Sensor_Motion.sendCommand(OFF)
 end
 
 
-rule "Ceiling_Light OFF on timer"
+rule "NFC read"
 when
-    Time cron "0/30 * * ? * * *" //30 seconds
+    Item NFC_Reader received command
 then
-    logInfo("Ceiling_Light.OFF.timer", "Each 30 seconds TRY")
-    if(Ceiling_Sensor_Motion.state == ON){
-        Ceiling_Sensor_Motion.sendCommand(OFF)
-        logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour")
+    logInfo("NFC read","received http post")
+    if(authorisation.contains(NFC_Reader.state.toString)) {
+        Door_Lock.sendCommand(ON)
+        logInfo("NFC read","is authorized to enter")
     }else{
-        if (Ceiling_Light.state > 0) {
-            logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light closed each hour")
-            Ceiling_Light.sendCommand(0)
-        }
+        logInfo("NFC read","is NOT authorized")
     }
+end
+
+
+rule "Door_Lock ON"
+when
+    Item Door_Lock changed from OFF to ON
+then
+    logInfo("Door_Lock.ON", "Door_Lock.ON triggered")
+    lock_timer = createTimer(now.plusSeconds(lock_delay), [|
+        Door_Lock.sendCommand(OFF)
+        logInfo("1", "DoorLock On to OFF - Time Triggered")
+        lock_timer = null
+    ])
 end

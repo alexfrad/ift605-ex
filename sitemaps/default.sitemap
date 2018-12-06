@@ -12,4 +12,8 @@ sitemap default label="my space"
     Frame label="Lightbulb" {
         Slider  item=Ceiling_Light label="Ceiling_Light"
     }
+    Frame label="DoorLock" {
+        Default item=Door_Lock label="DoorLock"
+        Default item=NFC_Reader label="NFC Reader"
+    }
 }
