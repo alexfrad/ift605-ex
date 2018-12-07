@@ -1,0 +1,91 @@
+import java.util.*
+   
+var authorisation = newArrayList("36127591507779588")
+var Number luminanceThreshold = 180
+
+// val List<String> authorised = createArrayList("3612759157779588")
+
+rule "Door_Sensor_Contact OPEN"
+when
+    Item Door_Sensor_Contact changed from CLOSED to OPEN 
+then
+    logInfo("Door_Sensor_Contact.OPEN","Door_Sensor_Contact opened")
+    if(Ceiling_Sensor_Luminance.state < luminanceThreshold){
+        Ceiling_Light.sendCommand(ON)
+        logInfo("Ceiling_Light.ON", "Ceiling_Light open on trigger")
+    }else{
+        if(Ceiling_Sensor_Luminance.state < luminanceThreshold && Ceiling_Light.state == 0){
+            Ceiling_Light.sendCommand(ON)
+            logInfo("Ceiling_Light.ON", "Ceiling_Light open on trigger")
+        }else{
+            logInfo("Ceiling_Light.ON", "Rule has run but Luminance: " + Ceiling_Sensor_Luminance.state + $
+        }
+    }
+end
+
+rule "Ceiling_Light ON"
+when
+    Item Ceiling_Sensor_Motion changed from OFF to ON 
+then
+    if(Ceiling_Sensor_Luminance.state < luminanceThreshold && Ceiling_Light.state == 0){
+        Ceiling_Light.sendCommand(ON)
+        logInfo("Ceiling_Light.ON", "Ceiling_Light open on trigger")
+    }else{
+        logInfo("Ceiling_Light.ON", "Rule has run but Luminance: " + Ceiling_Sensor_Luminance.state + $
+    }
+end
+
+
+rule "Door_Sensor_Contact OFF"
+when
+    Item Door_Sensor_Contact changed from OPEN to CLOSED
+then
+    logInfo("Door_Sensor_Contact.OFF", "Door_Sensor_Contact closed")
+    Ceiling_Sensor_Motion.sendCommand(OFF)
+end
+
+
+rule "Ceiling_Light OFF timer"
+when
+    Time cron "0/30 * * ? * * *" //30 seconds
+then
+    logInfo("Ceiling_Light.OFF.timer", "Each 30 seconds TRY")
+    if(Ceiling_Sensor_Motion.state == ON){
+        Ceiling_Sensor_Motion.sendCommand(OFF)
+        logInfo("Ceiling_Light.OFF.timer", "Ceiling_Sensor_Motion turned OFF")
+    }else{
+        if (Ceiling_Light.state > 0) {
+            logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light turned OFF")
+            Ceiling_Light.sendCommand(0)
+        }else{
+            logInfo("Ceiling_Light.OFF.timer", "Ceiling_Light already OFF")
+            Ceiling_Light.sendCommand(0)
+        }
+    }
+end
+
+rule "Door lock update"
+when
+    Item Door_Lock received update
+then
+    logInfo("Door.lock.update", "received update")
+    if(Door_Lock.state == ON) {
+        logInfo("Door.lock.update", "Door_Lock is ON, Ceiling_Light turned ON")
+        Ceiling_Light.sendCommand(ON)
+    }else{
+        logInfo("Ceiling_Light.OFF.timer", "Door_Lock is OFF")
+    }
+end
+
+rule "NFC read"
+when
+    Item NFC_Reader received command
+then
+    logInfo("NFC read","received http post")
+    if(authorisation.contains(NFC_Reader.state.toString)) {
+        Door_Lock.sendCommand(ON)
+        logInfo("NFC read","is authorized to enter")
+    }else{
+        logInfo("NFC read","is NOT authorized")
+    }
+end

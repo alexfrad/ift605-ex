@@ -15,24 +15,19 @@ when
 then
     logInfo("Ceiling_Light.TRY", "Ceiling_Light.TRY triggered")
     if(Ceiling_Sensor_Luminance.state < luminanceThreshold){
-        if(Ceiling_Light.state == 0){
-            Ceiling_Light.sendCommand(100)
-            logInfo("Ceiling_Light.TRY", "Ceiling_Light open on trigger")
-            light_timer = createTimer(now.plusSeconds(light_delay), [|
-                logInfo("Ceiling_Light.TRY", "Ceiling_light - Time Triggered")
-                light_timer = null
-                if(Ceiling_Sensor_Motion.state == OFF){
-                    Ceiling_Light.sendCommand(OFF)
-                    logInfo("Ceiling_Light.TRY", "Ceiling_light ON to OFF - Time triggered, no mouvement")
-                }else{
-                    Ceiling_Light_Switch.sendCommand(ON)
-                    logInfo("Ceiling_Light.TRY", "Ceiling_light - Time triggered, mouvement")
-                }
-            ])
-
-        }else{
-            logInfo("Ceiling_Light.TRY", "Ceiling_Light already open")
-        }
+        Ceiling_Light.sendCommand(100)
+        logInfo("Ceiling_Light.TRY", "Ceiling_Light open on trigger")
+        light_timer = createTimer(now.plusSeconds(light_delay), [|
+            logInfo("Ceiling_Light.TRY", "Ceiling_light - Time Triggered")
+            light_timer = null
+            if(Ceiling_Sensor_Motion.state == OFF){
+                Ceiling_Light.sendCommand(OFF)
+                logInfo("Ceiling_Light.TRY", "Ceiling_light ON to OFF - Time triggered, no mouvement")
+            }else{
+                Ceiling_Light_Switch.sendCommand(ON)
+                logInfo("Ceiling_Light.TRY", "Ceiling_light - Time triggered, mouvement")
+            }
+        ])
     }else{
 	Ceiling_Light.sendCommand(0)
         logInfo("Ceiling_Light.TRY", "Luminance: " + Ceiling_Sensor_Luminance.state + " is higher than " + luminanceThreshold)

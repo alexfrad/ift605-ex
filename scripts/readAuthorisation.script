@@ -1,0 +1,9 @@
+val java.util.Set linesSet = new java.util.HashSet()
+val reader = new java.io.FileReader("list.txt")
+val values = new java.io.BufferedReader(reader)
+var String line = reader.readLine()
+while (line !== null) {
+    linesSet.add(line)
+    line = values.readLine()
+}
+return linesSet
